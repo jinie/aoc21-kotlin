@@ -1,4 +1,3 @@
-
 fun main() {
     fun part1(input: List<Int>): Int {
         var res = 0
