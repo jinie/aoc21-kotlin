@@ -24,7 +24,7 @@ fun main() {
         }
         return listOf( abs(pos * depth), abs(pos*depth2))
     }
-    
+
     val input = readInput("Day02").map{ it.trim().split(" ") }
     println(part1(input))
 }
