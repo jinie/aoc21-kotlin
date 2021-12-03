@@ -1,5 +1,4 @@
-class Day03() {
-
+fun main(){
     fun part1(input: List<String>): Long {
         var gamma = mutableListOf<Char>()
         for (i in 0 until input[0].length){
@@ -13,6 +12,7 @@ class Day03() {
         https://github.com/ephemient/aoc2021/blob/main/kt/src/commonMain/kotlin/com/github/ephemient/aoc2021/Day3.kt
      */
     fun part2(input: List<String>): Int {
+        val comparator: Comparator<Map.Entry<Char, Int>> = compareBy({ it.value }, { it.key })
         val o2 = input.toMutableList()
         val co2 = input.toMutableList()
         for (i in 0 until (input.minOfOrNull { it.length } ?: 0)) {
@@ -24,16 +24,9 @@ class Day03() {
         return o2.single().toInt(2) * co2.single().toInt(2)
     }
 
-    companion object {
-        private val comparator: Comparator<Map.Entry<Char, Int>> = compareBy({ it.value }, { it.key })
-    }
-}
-
-fun main() {
     val input = readInput("Day03").map{
         it.trim()
     }
-
-    println(Day03().part1(input))
-    println(Day03().part2(input))
+    println(part1(input))
+    println(part2(input))
 }
