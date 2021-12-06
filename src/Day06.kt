@@ -3,9 +3,9 @@ import java.math.BigInteger
 fun main() {
     fun part1(ndays: Int, input: List<Int>): BigInteger {
         val fish = generateSequence { 0 }.take(9).map{ it.toBigInteger() }.toMutableList()
-        for(i in input){
-            fish[i]+=1.toBigInteger()
-        }
+
+        for (i in input.groupingBy { it }.eachCount().entries)
+            fish[i.key] = i.value.toBigInteger()
 
         for (i in 0 until ndays){
             val tfish = fish.removeFirst()
@@ -13,12 +13,7 @@ fun main() {
             fish[6] += tfish
         }
 
-        var sum = 0.toBigInteger()
-        for(f in fish){
-            sum += f
-        }
-
-        return sum
+        return fish.sumOf { it }
     }
 
     val testInput = "3,4,3,1,2".split(",").map{ it.toInt()}
