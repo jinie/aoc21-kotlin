@@ -4,7 +4,8 @@ fun main() {
         for (i in 0 until input[0].length) {
             //gamma += if(input.count { it[i]=='1' } > input.count { it[i] == '0'}) '1' else '0'
             gamma += input.groupingBy { it[i] }.eachCount().entries.maxWithOrNull(compareBy({ it.value },
-                { it.key }))!!.key
+                { it.key })
+            )!!.key
         }
         val epsilon = gamma.map { if (it == '0') '1' else '0' }.joinToString("")
         return epsilon.toLong(2) * gamma.joinToString("").toLong(2)

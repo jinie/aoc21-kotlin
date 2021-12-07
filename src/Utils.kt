@@ -12,15 +12,20 @@ fun readInput(name: String) = File("src", "$name.txt").readLines()
  */
 fun String.md5(): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16)
 
-inline fun measureTimeMillis(block : () -> Unit): Long {
-    val start = System.currentTimeMillis()
-    block()
-    return System.currentTimeMillis() - start
+/* Stolen from https://proandroiddev.com/measuring-execution-times-in-kotlin-460a0285e5ea */
+inline fun <T> measureTimeMillis(
+    loggingFunction: (Long) -> Unit, function: () -> T
+): T {
+
+    val startTime = System.currentTimeMillis()
+    val result: T = function.invoke()
+    loggingFunction.invoke(System.currentTimeMillis() - startTime)
+
+    return result
 }
 
-fun transpose(matrix: List<List<Int>>): List<List<Int>> =
-    (0 until matrix[0].size).map { column ->
-        (0 until matrix.size).map { row ->
-            matrix[row][column]
-        }
+fun transpose(matrix: List<List<Int>>): List<List<Int>> = (0 until matrix[0].size).map { column ->
+    (0 until matrix.size).map { row ->
+        matrix[row][column]
     }
+}
