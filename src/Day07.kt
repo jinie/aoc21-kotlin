@@ -12,7 +12,7 @@ fun main() {
     fun part2(input: List<Int>): Int {
         return (input.minOrNull()!!..input.maxOrNull()!!).minOf { pos ->
             input.sumOf {
-                (it - pos).absoluteValue.let { it * (it + 1) / 2 }
+                (it - pos).absoluteValue.let { it2 -> it2 * (it2 + 1) / 2 }
             }
         }
     }

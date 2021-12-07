@@ -2,7 +2,6 @@ fun main() {
     fun part1(input: List<String>): Long {
         var gamma = mutableListOf<Char>()
         for (i in 0 until input[0].length) {
-            //gamma += if(input.count { it[i]=='1' } > input.count { it[i] == '0'}) '1' else '0'
             gamma += input.groupingBy { it[i] }.eachCount().entries.maxWithOrNull(compareBy({ it.value },
                 { it.key })
             )!!.key
