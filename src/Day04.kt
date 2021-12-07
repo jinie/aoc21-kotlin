@@ -78,7 +78,7 @@ fun main() {
         return 0
     }
 
-    measureTimeMillis( {println("Time Taken $it ms")}) {
+    measureTimeMillisPrint {
         val input = readInput("Day04").filter { it.trimIndent().isNotBlank() }
         val numbers = input[0].split(",").map { it.toInt() }
         val boards =

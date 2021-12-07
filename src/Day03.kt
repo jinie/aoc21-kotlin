@@ -26,10 +26,12 @@ fun main() {
         return o2.single().toInt(2) * co2.single().toInt(2)
     }
 
-    val input = readInput("Day03").map {
-        it.trim()
-    }
+    measureTimeMillisPrint {
+        val input = readInput("Day03").map {
+            it.trim()
+        }
 
-    println(part1(input))
-    println(part2(input))
+        println(part1(input))
+        println(part2(input))
+    }
 }

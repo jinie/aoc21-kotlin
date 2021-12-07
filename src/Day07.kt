@@ -20,8 +20,8 @@ fun main() {
     val testInput = "16,1,2,0,4,2,7,1,2,14".split(",").map { it.toInt() }
     check(part1(testInput) == 37)
 
-    measureTimeMillis({ println("Time Taken $it ms") }) {
-        val input = readInput("Day07")[0].split(",").map { it.trim().toInt() }
+    measureTimeMillisPrint {
+        val input = readInputToIntList("Day07")
         println("Part 1 : " + part1(input))
         println("Part 2 : " + part2(input))
     }

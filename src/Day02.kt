@@ -24,7 +24,7 @@ fun main() {
         return listOf(abs(ss.pos * ss.depth), abs(ss.pos * ss.depth2))
     }
 
-    measureTimeMillis({ println("Time Taken $it ms") }) {
+    measureTimeMillisPrint {
         val input = readInput("Day02").map {
             val (key, inc) = it.trim().split(" ")
             Instruction(key, inc.toInt())
