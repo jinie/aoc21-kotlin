@@ -24,9 +24,12 @@ fun main() {
         return listOf( abs(ss.pos * ss.depth), abs(ss.pos*ss.depth2))
     }
 
-    val input = readInput("Day02").map{
-        val (key, inc) = it.trim().split(" ")
-        Instruction(key,inc.toInt())
+    val timeTaken = measureTimeMillis {
+        val input = readInput("Day02").map {
+            val (key, inc) = it.trim().split(" ")
+            Instruction(key, inc.toInt())
+        }
+        println(part1(input))
     }
-    println(part1(input))
+    println("Time Taken $timeTaken ms")
 }

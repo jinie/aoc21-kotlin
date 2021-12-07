@@ -19,11 +19,14 @@ fun main() {
     val testInput = "3,4,3,1,2".split(",").map{ it.toInt()}
     check(part1(80, testInput)==5934.toBigInteger())
 
-    val input = readInput("Day06").map{ it ->
-        it.trim().split(",").map{
-                ival -> ival.toInt()
-        }
-    }.flatten()
-    println("Part 1 : "+part1(80, input))
-    println("Part 2 : "+part1(256, input))
+    val timeTaken = measureTimeMillis {
+        val input = readInput("Day06").map { it ->
+            it.trim().split(",").map { ival ->
+                ival.toInt()
+            }
+        }.flatten()
+        println("Part 1 : " + part1(80, input))
+        println("Part 2 : " + part1(256, input))
+    }
+    println("Time Taken $timeTaken ms")
 }

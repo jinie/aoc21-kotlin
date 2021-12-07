@@ -17,10 +17,14 @@ fun main() {
         }
     }
 
-    val testInput = "16,1,2,0,4,2,7,1,2,14".split(",").map { it.toInt() }.sorted()
+    val testInput = "16,1,2,0,4,2,7,1,2,14".split(",").map { it.toInt() }
     check(part1(testInput) == 37)
 
-    val input = readInput("Day07")[0].split(",").map { it.trim().toInt() }
-    println("Part 1 : " + part1(input))
-    println("Part 2 : " + part2(input))
+    val timeTaken = measureTimeMillis {
+        val input = readInput("Day07")[0].split(",").map { it.trim().toInt() }
+        println("Part 1 : " + part1(input))
+        println("Part 2 : " + part2(input))
+    }
+    println("Time Taken ${timeTaken}")
 }
+
