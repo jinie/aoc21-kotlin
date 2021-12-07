@@ -1,28 +1,21 @@
 import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 fun main() {
     fun part1(input: List<Int>): Int? {
-        var arr = mutableListOf<Int>()
-        for (i in input.minOf { it }..input.maxOf { it }) {
-            var sum = 0
-            for (j in input) {
-                sum += abs(j - i)
+        return(input.minOrNull()!!..input.maxOrNull()!!).minOf { pos ->
+            input.sumOf {
+                (it-pos).absoluteValue
             }
-            arr.add(sum)
         }
-        return arr.minOrNull()
     }
 
     fun part2(input: List<Int>): Int? {
-        var arr = mutableListOf<Int>()
-        for (i in input.minOf { it }..input.maxOf { it }) {
-            var sum = 0
-            for (j in input) {
-                sum += (abs(i - j) * (abs(i - j) + 1)) / 2
+        return(input.minOrNull()!!..input.maxOrNull()!!).minOf { pos ->
+            input.sumOf {
+                (it-pos).absoluteValue.let { it * (it+1) / 2 }
             }
-            arr.add(sum)
         }
-        return arr.minOrNull()
     }
 
     val testInput = "16,1,2,0,4,2,7,1,2,14".split(",").map { it.toInt() }.sorted()
