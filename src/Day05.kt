@@ -47,7 +47,8 @@ fun main() {
 
     // test if implementation meets criteria from the description, like:
     check(part1("Day05_test") == 5)
-
-    println("Part 1 : " + part1("Day05"))
-    println("Part 2 : " + part2("Day05"))
+    measureTimeMillis({ println(" Time Taken $it ms")}) {
+        println("Part 1 : " + part1("Day05"))
+        println("Part 2 : " + part2("Day05"))
+    }
 }

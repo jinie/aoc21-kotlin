@@ -78,11 +78,13 @@ fun main() {
         return 0
     }
 
-    val input = readInput("Day04").filter { it.trimIndent().isNotBlank() }
-    val numbers = input[0].split(",").map { it.toInt() }
-    val boards =
-        input.asSequence().drop(1).map { line -> line.split(" ").filter { it.isNotBlank() }.map { it.toInt() } }
-            .map { line -> Row(line.map { BingoNumber(it) }) }.chunked(5).map { Board(it) }.toList()
-    println("Part 1 : " + part1(numbers, boards))
-    println("Part 2 : " + part2(numbers, boards))
+    measureTimeMillis( {println("Time Taken $it ms")}) {
+        val input = readInput("Day04").filter { it.trimIndent().isNotBlank() }
+        val numbers = input[0].split(",").map { it.toInt() }
+        val boards =
+            input.asSequence().drop(1).map { line -> line.split(" ").filter { it.isNotBlank() }.map { it.toInt() } }
+                .map { line -> Row(line.map { BingoNumber(it) }) }.chunked(5).map { Board(it) }.toList()
+        println("Part 1 : " + part1(numbers, boards))
+        println("Part 2 : " + part2(numbers, boards))
+    }
 }
