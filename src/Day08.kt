@@ -1,58 +1,40 @@
 fun main() {
-    data class Digit(val outputLine: List<String>, val inputLine: List<String>)
 
-    fun parseInput(input: List<String>): List<Digit> =
-        input.map { it.trim().split("|") }.map { p -> Digit(p.first().trim().split(" "), p.last().trim().split(" ")) }
+    fun parseInput(input: List<String>): List<Pair<List<Set<Char>>,List<Set<Char>>>> =
+        input.map { it.trim().split("|") }.map { p -> Pair(p.first().trim().split(" ").map { it.toCharArray().toSet() }, p.last().trim().split(" ").map { it.toCharArray().toSet() }) }
 
-    fun part1(input: List<Digit>): Int = input.sumOf { it.inputLine.count { p -> p.length in intArrayOf(2, 3, 4, 7) } }
+    fun part1(input: List<Pair<List<Set<Char>>,List<Set<Char>>>>): Int = input.sumOf { it.second.count { p -> p.size in intArrayOf(2, 3, 4, 7) } }
 
     /**
-     * Own solution
+     * "Optimal solution" for further study, stolen from https://www.reddit.com/r/adventofcode/comments/rbj87a/comment/hnpn4xm/?utm_source=share&utm_medium=web2x&context=3
      */
+    fun part2(input: List<Pair<List<Set<Char>>,List<Set<Char>>>>): Int {
+        return input.sumOf { (patterns, output) ->
+            val mappedDigits = mutableMapOf(
+                1 to patterns.first { it.size == 2 },
+                4 to patterns.first { it.size == 4 },
+                7 to patterns.first { it.size == 3 },
+                8 to patterns.first { it.size == 7 },
+            )
 
-    fun part2(input: List<Digit>): Int {
-
-        val sum = input.sumOf { pattern ->
-            var one = setOf<Char>()
-            var four = setOf<Char>()
-            var seven = setOf<Char>()
-            var eight = setOf<Char>()
-
-            pattern.outputLine.forEach {
-                when (it.length) {
-                    3 -> seven = it.toSet()
-                    4 -> four = it.toSet()
-                    2 -> one = it.toSet()
-                    7 -> eight = it.toSet()
-                }
+            with(mappedDigits) {
+                put(3, patterns.filter { it.size == 5 }.first { it.intersect(getValue(1)).size == 2 })
+                put(2, patterns.filter { it.size == 5 }.first { it.intersect(getValue(4)).size == 2 })
+                put(5, patterns.filter { it.size == 5 }.first { it !in values })
+                put(6, patterns.filter { it.size == 6 }.first { it.intersect(getValue(1)).size == 1 })
+                put(9, patterns.filter { it.size == 6 }.first { it.intersect(getValue(4)).size == 4 })
+                put(0, patterns.filter { it.size == 6 }.first { it !in values })
             }
 
-            var sub = mutableMapOf(seven to "7", four to "4", one to "1", eight to "8")
-
-            for (it in pattern.outputLine.filter { it.length == 5 }.map { it.toSet() }) { // Length 5 = 2,3 or 5
-                when{
-                    (it.minus(one).size == 3) -> sub[it] = "3"
-                    (it.minus(four).size == 2) -> sub[it] = "5"
-                    else -> sub[it] = "2"
-                }
-            }
-            for (it in pattern.outputLine.filter { it.length == 6 }.map { it.toSet() }) { // Length 6 = 0,6 or 9
-                when{
-                    (it.minus(four).size == 2) -> sub[it] = "9"
-                    ((eight.minus(it)).intersect(one).isNotEmpty()) -> sub[it] = "6"
-                    else -> sub[it] = "0"
-                }
-            }
-
-            var nrStr = ""
-            for (l in pattern.inputLine) {
-                nrStr += sub[l.toSet()]!!
-            }
-            nrStr.toInt()
+            val mappedPatterns = mappedDigits.entries.associateBy({ it.value }) { it.key }
+            output.joinToString("") { mappedPatterns.getValue(it).toString() }.toInt()
         }
-        return sum
     }
-    check(26 == part1(parseInput(readInput("Day08_test"))))
+
+
+    val testInput = parseInput(readInput("Day08_test"))
+    check(26 == part1(testInput))
+    check(61229 == part2(testInput))
 
     measureTimeMillisPrint {
         val input = parseInput(readInput("Day08"))
