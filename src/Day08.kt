@@ -6,19 +6,17 @@ fun main() {
 
     fun part1(input: List<Digit>): Int = input.sumOf { it.inputLine.count { p -> p.length in intArrayOf(2, 3, 4, 7) } }
 
+    /**
+     * Own solution
+     */
+
     fun part2(input: List<Digit>): Int {
 
         val sum = input.sumOf { pattern ->
-            var zero = setOf<Char>()
             var one = setOf<Char>()
-            var two = setOf<Char>()
-            var three = setOf<Char>()
             var four = setOf<Char>()
-            var five = setOf<Char>()
-            var six = setOf<Char>()
             var seven = setOf<Char>()
             var eight = setOf<Char>()
-            var nine = setOf<Char>()
 
             pattern.outputLine.forEach {
                 when (it.length) {
@@ -29,36 +27,22 @@ fun main() {
                 }
             }
 
-            for (it in pattern.outputLine.filter { it.length == 5 }) {
-                val v = it.toSet()
-                if (v.minus(one).size == 3)
-                    three = v
-                else if (v.minus(four).size == 2)
-                    five = v
-                else
-                    two = v
-                for (it in pattern.outputLine.filter { it.length == 6 }) {
-                    val v = it.toSet()
-                    if (v.minus(four).size == 2)
-                        nine = v
-                    else if ((eight.minus(v)).intersect(one).isNotEmpty())
-                        six = v
-                    else if (v.size == 6)
-                        zero = v
+            var sub = mutableMapOf(seven to "7", four to "4", one to "1", eight to "8")
+
+            for (it in pattern.outputLine.filter { it.length == 5 }.map { it.toSet() }) { // Length 5 = 2,3 or 5
+                when{
+                    (it.minus(one).size == 3) -> sub[it] = "3"
+                    (it.minus(four).size == 2) -> sub[it] = "5"
+                    else -> sub[it] = "2"
                 }
             }
-
-            var sub = mutableMapOf<Set<Char>, String>()
-            sub[zero] = "0"
-            sub[one] = "1"
-            sub[two] = "2"
-            sub[three] = "3"
-            sub[four] = "4"
-            sub[five] = "5"
-            sub[six] = "6"
-            sub[seven] = "7"
-            sub[eight] = "8"
-            sub[nine] = "9"
+            for (it in pattern.outputLine.filter { it.length == 6 }.map { it.toSet() }) { // Length 6 = 0,6 or 9
+                when{
+                    (it.minus(four).size == 2) -> sub[it] = "9"
+                    ((eight.minus(it)).intersect(one).isNotEmpty()) -> sub[it] = "6"
+                    else -> sub[it] = "0"
+                }
+            }
 
             var nrStr = ""
             for (l in pattern.inputLine) {
