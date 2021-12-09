@@ -1,28 +1,26 @@
 fun main() {
-    /**
-     * Part 2 Solution partially stolen from https://github.com/ClouddJR/AdventOfCode2021/blob/master/src/main/kotlin/com/clouddjr/advent2021/Day09.kt for further analysis
-     */
 
     fun neighbours(input: List<List<Int>>, rowIdx: Int, colIdx: Int): List<Pair<Int, Int>> {
         return arrayOf((-1 to 0), (1 to 0), (0 to -1), (0 to 1)).map { (dx, dy) -> rowIdx + dx to colIdx + dy }
             .filter { (x, y) -> x in input.indices && y in input.first().indices }
     }
 
-    fun basin(input: List<List<Int>>, rowIdx: Int, colIdx: Int): List<Pair<Int, Int>> {
-        return neighbours(input, rowIdx, colIdx).filterNot { (x, y) -> input[x][y] == 9 }
-            .fold(listOf((rowIdx to colIdx))) { points, (x, y) ->
-                points + if (input[x][y] - input[rowIdx][colIdx] >= 1) basin(input, x, y) else emptyList()
+    fun floodFill(input: List<List<Int>>, lp: Pair<Int,Int>, threshold: Int): List<Pair<Int, Int>> {
+        var toSearch = mutableSetOf(lp)
+        val visited = mutableSetOf<Pair<Int, Int>>()
+        val filled = mutableSetOf<Pair<Int, Int>>()
+        while (toSearch.isNotEmpty()) {
+            val current = toSearch.first()
+            toSearch.remove(current)
+            visited.add(current)
+            if (input[current.first][current.second] < threshold) {
+                filled.add(current)
+                neighbours(input, current.first, current.second).filter { it !in visited }.forEach { toSearch.add(it) }
             }
+        }
+        return filled.toList()
     }
 
-    /*    fun lowPoints(): List<Pair<Int, Int>> {
-            return heightmap.foldIndexed(emptyList()) { rowIdx, allPoints, row ->
-                row.foldIndexed(allPoints) { colIdx, points, height ->
-                    neighbours(rowIdx, colIdx).all { (x, y) -> heightmap[x][y] > height }
-                        .let { isLowest -> if (isLowest) points + (rowIdx to colIdx) else points }
-                }
-            }
-        }*/
     fun lowPoints(input: List<List<Int>>): List<Pair<Int, Int>> {
         var ret = mutableListOf<Pair<Int, Int>>()
         for (i in input.indices) {
@@ -40,11 +38,9 @@ fun main() {
         return ret.toList()
     }
 
-    fun solvePart2(input: List<List<Int>>): Int {
-        return lowPoints(input).map { (rowIdx, colIdx) -> basin(input, rowIdx, colIdx).toSet().size }.sortedDescending()
-            .take(3).reduce { acc, i -> acc * i }
+    fun part2(input: List<List<Int>>): Int {
+        return lowPoints(input).map { floodFill(input, it, 9).toSet().size }.sortedDescending().take(3).reduce { acc, i -> acc * i }
     }
-
 
     fun part1(input: List<List<Int>>): Int {
         return lowPoints(input).sumOf { input[it.first][it.second] + 1 }
@@ -53,7 +49,7 @@ fun main() {
     measureTimeMillisPrint {
         val input = readInput("Day09").map { row -> row.map { it.digitToInt() } }
         println("Part 1 : " + part1(input))
-        println("Part 2 : " + solvePart2(input))
+        println("Part 2 : " + part2(input))
     }
 
 }
