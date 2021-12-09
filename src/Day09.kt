@@ -1,12 +1,18 @@
 fun main() {
 
+    /**
+     * Finds neighbours in a grid
+     */
     fun neighbours(input: List<List<Int>>, rowIdx: Int, colIdx: Int): List<Pair<Int, Int>> {
         return arrayOf((-1 to 0), (1 to 0), (0 to -1), (0 to 1)).map { (dx, dy) -> rowIdx + dx to colIdx + dy }
             .filter { (x, y) -> x in input.indices && y in input.first().indices }
     }
 
-    fun floodFill(input: List<List<Int>>, lp: Pair<Int,Int>, threshold: Int): List<Pair<Int, Int>> {
-        var toSearch = mutableSetOf(lp)
+    /**
+     * Performs flood fill over a list of low points
+     */
+    fun floodFill(input: List<List<Int>>, lowPoints: Pair<Int, Int>, threshold: Int): List<Pair<Int, Int>> {
+        var toSearch = mutableSetOf(lowPoints)
         val visited = mutableSetOf<Pair<Int, Int>>()
         val filled = mutableSetOf<Pair<Int, Int>>()
         while (toSearch.isNotEmpty()) {
@@ -21,25 +27,24 @@ fun main() {
         return filled.toList()
     }
 
+    /**
+     * Finds the lowest points in the input
+     */
     fun lowPoints(input: List<List<Int>>): List<Pair<Int, Int>> {
-        var ret = mutableListOf<Pair<Int, Int>>()
-        for (i in input.indices) {
-            for (j in input[i].indices) {
-                var neighbours = mutableListOf<Int>()
-
-                if (j > 0) neighbours.add(input[i][j - 1]) // Check left
-                if (j < input[i].size - 1) neighbours.add(input[i][j + 1]) // Check right
-                if (i > 0) neighbours.add(input[i - 1][j]) // Check up
-                if (i < input.size - 1) neighbours.add(input[i + 1][j])
-
-                if (neighbours.minOf { it } > input[i][j]) ret.add(Pair(i, j))
+        val lowPoints = mutableSetOf<Pair<Int, Int>>()
+        for (row in input.indices) {
+            for (col in input.first().indices) {
+                if (neighbours(input, row, col).map { input[it.first][it.second] }.minOf { it } > input[row][col]) {
+                    lowPoints.add(row to col)
+                }
             }
         }
-        return ret.toList()
+        return lowPoints.toList()
     }
 
     fun part2(input: List<List<Int>>): Int {
-        return lowPoints(input).map { floodFill(input, it, 9).toSet().size }.sortedDescending().take(3).reduce { acc, i -> acc * i }
+        return lowPoints(input).map { floodFill(input, it, 9).toSet().size }.sortedDescending().take(3)
+            .reduce { acc, i -> acc * i }
     }
 
     fun part1(input: List<List<Int>>): Int {
@@ -51,5 +56,4 @@ fun main() {
         println("Part 1 : " + part1(input))
         println("Part 2 : " + part2(input))
     }
-
 }
