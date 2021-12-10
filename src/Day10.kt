@@ -3,20 +3,18 @@ fun main() {
     val illegalChars = mapOf(')' to 3, ']' to 57, '}' to 1197, '>' to 25137)
     val multipliers = mapOf(')' to 1, ']' to 2, '}' to 3, '>' to 4)
 
-    fun checkLine(input: String): Int {
-        return with(ArrayDeque<Char>()) {
-            input.map { c ->
-                when {
-                    c in bracePairs.keys -> (0).also { addLast(c) }
-                    bracePairs[removeLast()] != c -> illegalChars.getValue(c)
-                    else -> 0
+    fun part1(input: List<String>): Int {
+        return input.sumOf { line ->
+            with(ArrayDeque<Char>()) {
+                line.sumOf { c ->
+                    when {
+                        c in bracePairs.keys -> (0).also { addLast(c) }
+                        bracePairs[removeLast()] != c -> illegalChars.getValue(c)
+                        else -> 0
+                    }
                 }
             }
-        }.sum()
-    }
-
-    fun part1(input: List<String>): Int {
-        return input.sumOf { checkLine(it) }
+        }
     }
 
     fun part2(input: List<String>): Long {

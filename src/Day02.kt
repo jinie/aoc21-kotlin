@@ -5,7 +5,7 @@ fun main() {
     data class SubState(var pos: Int = 0, var depth: Int = 0, var depth2: Int = 0)
 
     fun part1(instructions: List<Instruction>): List<Int> {
-        var ss = SubState()
+        val ss = SubState()
         for (p in instructions.iterator()) {
             when (p.key) {
                 "forward" -> {
