@@ -1,5 +1,5 @@
 fun main() {
-    var bracePairs = mapOf('(' to ')', '[' to ']', '{' to '}', '<' to '>')
+    val bracePairs = mapOf('(' to ')', '[' to ']', '{' to '}', '<' to '>')
     val illegalChars = mapOf(')' to 3, ']' to 57, '}' to 1197, '>' to 25137)
     val multipliers = mapOf(')' to 1, ']' to 2, '}' to 3, '>' to 4)
 
@@ -20,13 +20,12 @@ fun main() {
     }
 
     fun part2(input: List<String>): Long {
-        return input.filterNot { checkLine(it) > 0 }.map { l ->
+        return input.map { l ->
             with(ArrayDeque<Char>()) {
                 l.forEach { c ->
                     when {
                         (c in bracePairs.keys) -> (0).also { addLast(c) }
                         bracePairs[removeLast()] != c -> return@map null
-                        else -> 0
                     }
                 }
                 reversed().map { bracePairs.getValue(it) }.fold(0L) { acc, i -> (acc * 5) + multipliers.getValue(i) }
