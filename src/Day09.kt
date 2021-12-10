@@ -23,18 +23,28 @@ fun main() {
                 }
             }
         }*/
+
+    fun floodFill(input: List<List<Int>>, lowPoints: List<Pair<Int,Int>>, threshold: Int): MutableSet<Pair<Int, Int>>  {
+        var floodArea = lowPoints.toMutableSet()
+        var added = Int.MAX_VALUE
+        while(added > 0) {
+            var tset = mutableSetOf<Pair<Int,Int>>()
+            for (pt in floodArea) {
+                for(np in neighbours(input,pt.first, pt.second).filterNot { input[pt.first][pt.second] >= threshold }){
+                    if(input[np.first][np.second] < threshold) tset.add(np)
+                }
+            }
+            added = tset.minus(tset.intersect(floodArea)).size
+            floodArea.addAll(tset.minus(tset.intersect(floodArea)))
+        }
+        return floodArea
+    }
+
     fun lowPoints(input: List<List<Int>>): List<Pair<Int, Int>> {
         var ret = mutableListOf<Pair<Int, Int>>()
         for (i in input.indices) {
             for (j in input[i].indices) {
-                var neighbours = mutableListOf<Int>()
-
-                if (j > 0) neighbours.add(input[i][j - 1]) // Check left
-                if (j < input[i].size - 1) neighbours.add(input[i][j + 1]) // Check right
-                if (i > 0) neighbours.add(input[i - 1][j]) // Check up
-                if (i < input.size - 1) neighbours.add(input[i + 1][j])
-
-                if (neighbours.minOf { it } > input[i][j]) ret.add(Pair(i, j))
+                if( neighbours(input, i, j).map{ input[it.first][it.second]}.minOf { it } > input[i][j]) ret.add(Pair(i,j))
             }
         }
         return ret.toList()
@@ -45,6 +55,10 @@ fun main() {
             .take(3).reduce { acc, i -> acc * i }
     }
 
+    fun part2(input: List<List<Int>>): Int? {
+        var ret = floodFill(input, lowPoints(input),9).count()
+        return ret
+    }
 
     fun part1(input: List<List<Int>>): Int {
         return lowPoints(input).sumOf { input[it.first][it.second] + 1 }
@@ -54,6 +68,7 @@ fun main() {
         val input = readInput("Day09").map { row -> row.map { it.digitToInt() } }
         println("Part 1 : " + part1(input))
         println("Part 2 : " + solvePart2(input))
+        println(part2(input))
     }
 
 }
