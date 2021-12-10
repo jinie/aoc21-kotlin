@@ -1,44 +1,41 @@
 fun main() {
-    var openingBraces = listOf('(', '[', '{', '<')
-    var bracePairs = mapOf(')' to '(', ']' to '[', '}' to '{', '>' to '<')
+    var bracePairs = mapOf('(' to ')', '[' to ']', '{' to '}', '<' to '>')
     val illegalChars = mapOf(')' to 3, ']' to 57, '}' to 1197, '>' to 25137)
-    val multipliers = mapOf('(' to 1, '[' to 2, '{' to 3, '<' to 4)
+    val multipliers = mapOf(')' to 1, ']' to 2, '}' to 3, '>' to 4)
 
-    fun checkLine(input: String): Long {
-        var stack = mutableListOf<Char>()
-        return input.map { c ->
-            if (c in openingBraces) {
-                stack.add(c)
-                0L
-            } else {
-                val cl = stack.removeLast()
-                if (bracePairs[c] != cl) {
-                    illegalChars[c]!!.toLong()
-                }else {
-                    0L
+    fun checkLine(input: String): Int {
+        return with(ArrayDeque<Char>()){
+            input.map { c ->
+                when{
+                    c in bracePairs.keys -> (0).also { addLast(c) }
+                    bracePairs[removeLast()] != c -> illegalChars.getValue(c)
+                    else -> 0
                 }
             }
-        }.reduce{acc, i -> acc+i}
+        }.sum()
     }
 
-    fun part1(input: List<String>): Long {
+    fun part1(input: List<String>): Int {
         return input.sumOf { checkLine(it) }
     }
 
     fun part2(input: List<String>): Long {
-        val scores = input.filterNot { checkLine(it) > 0 }.map { l ->
-            var stack = mutableListOf<Char>()
-            l.forEach { c ->
-                if (c in openingBraces) stack.add(c)
-                else if (stack.last() == bracePairs[c]) stack.removeLast()
+        return input.filterNot { checkLine(it) > 0 }.map { l ->
+            with(ArrayDeque<Char>()) {
+                l.forEach { c ->
+                    when {
+                        (c in bracePairs.keys) -> (0).also { addLast(c) }
+                        bracePairs[removeLast()] != c -> return@map null
+                        else -> 0
+                    }
+                }
+                reversed().map { bracePairs.getValue(it) }.fold(0L) { acc, i -> (acc * 5) + multipliers.getValue(i) }
             }
-            stack.reversed().map { multipliers[it]!!.toLong() }.reduce { acc, i -> ((acc * 5) + i) }
-        }.sorted()
-        return scores[scores.size / 2]
+        }.filterNotNull().sorted().let { it[it.size/2] }
     }
 
     val testInput = readInput("Day10_test").map { it.trim() }
-    check(part1(testInput) == 26397L)
+    check(part1(testInput) == 26397)
 
     measureTimeMillisPrint {
         val input = readInput("Day10").map { it.trim() }
