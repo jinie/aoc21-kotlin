@@ -4,9 +4,9 @@ fun main() {
     val multipliers = mapOf(')' to 1, ']' to 2, '}' to 3, '>' to 4)
 
     fun checkLine(input: String): Int {
-        return with(ArrayDeque<Char>()){
+        return with(ArrayDeque<Char>()) {
             input.map { c ->
-                when{
+                when {
                     c in bracePairs.keys -> (0).also { addLast(c) }
                     bracePairs[removeLast()] != c -> illegalChars.getValue(c)
                     else -> 0
@@ -31,7 +31,7 @@ fun main() {
                 }
                 reversed().map { bracePairs.getValue(it) }.fold(0L) { acc, i -> (acc * 5) + multipliers.getValue(i) }
             }
-        }.filterNotNull().sorted().let { it[it.size/2] }
+        }.filterNotNull().sorted().let { it[it.size / 2] }
     }
 
     val testInput = readInput("Day10_test").map { it.trim() }
