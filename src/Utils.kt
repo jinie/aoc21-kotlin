@@ -1,6 +1,8 @@
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
+import kotlin.math.absoluteValue
+import kotlin.math.sign
 
 /**
  * Reads lines from the given input txt file.
@@ -69,4 +71,38 @@ private fun allNeighbours(values: List<List<Int>>, y: Int, x: Int): List<Pair<In
         .filterNot { (dy, dx) -> dy == 0 && dx == 0 }
         .map { (dy, dx) -> y + dy to x + dx }
         .filter { (y, x) -> y in values.indices && x in values.first().indices }
+}
+
+/**
+ * Grid helper class, from
+ * https://todd.ginsberg.com/post/advent-of-code/2021/
+ */
+data class Point2d(val x: Int, val y: Int) {
+
+    infix fun sharesAxisWith(that: Point2d): Boolean =
+        x == that.x || y == that.y
+
+    infix fun lineTo(that: Point2d): List<Point2d> {
+        val xDelta = (that.x - x).sign
+        val yDelta = (that.y - y).sign
+        val steps = maxOf((x - that.x).absoluteValue, (y - that.y).absoluteValue)
+        return (1..steps).scan(this) { last, _ -> Point2d(last.x + xDelta, last.y + yDelta) }
+    }
+
+
+    fun neighbors(): List<Point2d> =
+        listOf(
+            Point2d(x, y + 1),
+            Point2d(x, y - 1),
+            Point2d(x + 1, y),
+            Point2d(x - 1, y)
+        )
+
+    fun allNeighbors(): List<Point2d> =
+        neighbors() + listOf(
+            Point2d(x - 1, y - 1),
+            Point2d(x - 1, y + 1),
+            Point2d(x + 1, y - 1),
+            Point2d(x + 1, y + 1)
+        )
 }
