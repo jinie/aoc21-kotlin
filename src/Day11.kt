@@ -1,6 +1,3 @@
-import kotlin.math.absoluteValue
-import kotlin.math.sign
-
 typealias OctopusCave = Map<Point2d, Int>
 
 fun OctopusCave.steps(): Sequence<Int> = sequence {
