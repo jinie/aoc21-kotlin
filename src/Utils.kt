@@ -51,3 +51,11 @@ fun transpose(matrix: List<List<Int>>): List<List<Int>> = (0 until matrix[0].siz
         matrix[row][column]
     }
 }
+
+/**
+ * Finds neighbours in a grid
+ */
+fun neighbours(input: List<List<Int>>, rowIdx: Int, colIdx: Int): List<Pair<Int, Int>> {
+    return arrayOf((-1 to 0), (1 to 0), (0 to -1), (0 to 1)).map { (dx, dy) -> rowIdx + dx to colIdx + dy }
+        .filter { (x, y) -> x in input.indices && y in input.first().indices }
+}
