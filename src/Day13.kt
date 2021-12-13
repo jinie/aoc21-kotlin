@@ -3,26 +3,21 @@ fun main() {
         return folds.fold(grid) { pt, i ->
             val (axis, pos) = i
             when (axis) {
-                "y" -> pt
-                    .map { if (it.y > pos) Point2d(it.x, 2 * pos - it.y) else it }
-                    .toSet()
-                else -> pt
-                    .map { if (it.x > pos) Point2d(2 * pos - it.x, it.y) else it }
-                    .toSet()
+                "y" -> pt.map { if (it.y > pos) Point2d(it.x, 2 * pos - it.y) else it }.toSet()
+                else -> pt.map { if (it.x > pos) Point2d(2 * pos - it.x, it.y) else it }.toSet()
             }
         }
     }
 
     fun draw(input: Set<Point2d>) {
-        for (y in 0..input.maxOf { it.y }) {
-            for (x in 0..input.maxOf { it.x }) {
-                when (input.contains(Point2d(x, y))) {
-                    true -> print("#")
-                    false -> print(" ")
+        println((0..input.maxOf { it.y }).map{ y ->
+            (0..input.maxOf { it.x }).map{ x ->
+                when(input.contains(Point2d(x,y))){
+                    true -> "█"
+                    false -> " "
                 }
-            }
-            println()
-        }
+            }.joinToString("","","\n")
+        }.joinToString(""))
     }
 
     measureTimeMillisPrint {
@@ -34,5 +29,4 @@ fun main() {
         println("Part 1 : " + fold(grid, folds.take(1)).size)
         draw(fold(grid, folds))
     }
-
 }
