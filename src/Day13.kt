@@ -5,13 +5,11 @@ fun main() {
             when (axis) {
                 "y" ->
                     pt
-                        .filter { it.y > pos }
-                        .map { Point2d(it.x, 2 * pos - it.y) }
-                        .toSet() + pt.filter { it.y < pos }
+                        .map { if(it.y > pos) Point2d(it.x, 2 * pos - it.y) else it }
+                        .toSet()
                 else -> pt
-                    .filter { it.x > pos }
-                    .map { Point2d(2 * pos - it.x, it.y) }
-                    .toSet() + pt.filter { it.x < pos }
+                    .map { if(it.x > pos) Point2d(2 * pos - it.x, it.y) else it }
+                    .toSet()
             }
         }
     }
