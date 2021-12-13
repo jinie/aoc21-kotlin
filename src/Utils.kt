@@ -77,7 +77,7 @@ private fun allNeighbours(values: List<List<Int>>, y: Int, x: Int): List<Pair<In
  * Grid helper class, from
  * https://todd.ginsberg.com/post/advent-of-code/2021/
  */
-data class Point2d(val x: Int, val y: Int) {
+data class Point2d(var x: Int, var y: Int) {
 
     infix fun sharesAxisWith(that: Point2d): Boolean =
         x == that.x || y == that.y
