@@ -7,7 +7,7 @@ import kotlin.math.sign
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String) = File("src", "$name.txt").readLines()
+fun readInput(name: String) = File("src/resources", "$name.txt").readLines()
 
 /**
  *  Reads input as a comma separated list of integers and returns a List<Int>
