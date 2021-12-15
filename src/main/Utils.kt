@@ -10,12 +10,6 @@ import kotlin.math.sign
 fun readInput(name: String) = File("src/resources", "$name.txt").readLines()
 
 /**
- *  Reads input as a comma separated list of integers and returns a List<Int>
- */
-fun readInputToIntList(name: String, sep: String = ",") =
-    File("src", "$name.txt").readLines().map { it.trim().split(sep).map { it.toInt() } }.flatten()
-
-/**
  * Converts string to md5 hash.
  */
 fun String.md5(): String = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray())).toString(16)

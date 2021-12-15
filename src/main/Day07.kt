@@ -21,7 +21,7 @@ fun main() {
     check(part1(testInput) == 37)
 
     measureTimeMillisPrint {
-        val input = readInputToIntList("Day07")
+        val input = readInput("Day07").map { it.trim().split(",").map { it.toInt() } }.flatten()
         println("Part 1 : " + part1(input))
         println("Part 2 : " + part2(input))
     }
