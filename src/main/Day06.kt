@@ -19,7 +19,7 @@ fun main() {
     check(part1(80, testInput) == 5934.toBigInteger())
 
     measureTimeMillisPrint {
-        val input = readInputToIntList("Day06")
+        val input = readInput("Day06").map { it.split(",").map { c -> c.toInt() } }.flatten()
         println("Part 1 : " + part1(80, input))
         println("Part 2 : " + part1(256, input))
     }
