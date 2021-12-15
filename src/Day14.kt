@@ -42,8 +42,9 @@ class Day14(input: List<String>) {
 
 fun main() {
     measureTimeMillisPrint {
-        println(Day14(readInput("Day14")).solvePart1())
-        println(Day14(readInput("Day14")).solvePart2())
+        val d14 = Day14(readInput("Day14"))
+        println(d14.solvePart1())
+        println(d14.solvePart2())
     }
 
 }
