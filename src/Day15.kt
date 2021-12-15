@@ -1,59 +1,56 @@
-typealias Point = Pair<Int, Int>
+import java.util.*
+
+class Day15(input: List<String>) {
+    private val riskLevels = input.map { row -> row.toCharArray().map { it.digitToInt() } }
+    private val expandedRiskLevels = riskLevels.expand()
+
+    fun solvePart1() = lowestRiskPath(riskLevels)
+    fun solvePart2() = lowestRiskPath(expandedRiskLevels)
+
+    private fun lowestRiskPath(riskLevels: List<List<Int>>): Int {
+        val dist = Array(riskLevels.size) { Array(riskLevels.first().size) { Int.MAX_VALUE } }.apply { get(0)[0] = 0 }
+        val toVisit = PriorityQueue<Pair<Int, Int>> { (pY, pX), (rY, rX) -> dist[pY][pX].compareTo(dist[rY][rX]) }
+        val visited = mutableSetOf(0 to 0)
+        toVisit.add(0 to 0)
+
+        while (toVisit.isNotEmpty()) {
+            val (y, x) = toVisit.poll().also { visited.add(it) }
+
+            neighbours(y, x, riskLevels).forEach { (nY, nX) ->
+                if (!visited.contains(nY to nX)) {
+                    val newDistance = dist[y][x] + riskLevels[nY][nX]
+                    if (newDistance < dist[nY][nX]) {
+                        dist[nY][nX] = newDistance
+                        toVisit.add(nY to nX)
+                    }
+                }
+            }
+        }
+
+        return dist[dist.lastIndex][dist.last().lastIndex]
+    }
+
+    private fun List<List<Int>>.expand(): List<List<Int>> {
+        val expandedRight = map { row -> (1 until 5).fold(row) { acc, step -> acc + row.increasedAndCapped(step) } }
+        return (1 until 5).fold(expandedRight) { acc, step -> acc + expandedRight.increased(step) }
+    }
+
+    private fun List<List<Int>>.increased(by: Int) = map { row -> row.increasedAndCapped(by) }
+
+    private fun List<Int>.increasedAndCapped(by: Int) = map { level -> (level + by).let { if (it > 9) it - 9 else it } }
+
+    private fun neighbours(y: Int, x: Int, riskLevels: List<List<Int>>): List<Pair<Int, Int>> {
+        return arrayOf((-1 to 0), (1 to 0), (0 to -1), (0 to 1))
+            .map { (dy, dx) -> y + dy to x + dx }
+            .filter { (y, x) -> y in riskLevels.indices && x in riskLevels.first().indices }
+    }
+}
 
 fun main() {
-
-    fun enlargeRow(xs: List<Int>) = xs.map { new ->
-        when (new + 1) {
-            10 -> 1
-            else -> new + 1
-        }
-    }
-
-    tailrec fun enlargeRowTimes(xs: List<Int>, times: Int): List<Int> = when (times) {
-        0 -> xs
-        1 -> enlargeRow(xs)
-        else -> enlargeRowTimes(enlargeRow(xs), times - 1)
-    }
-
-    fun enlargeMap(ys: List<List<Int>>): List<List<Int>> {
-        val tmap = ys.map { xs -> (0..4).fold(emptyList<Int>()) { acc, i -> acc + enlargeRowTimes(xs, i) } }
-        return (0..4).fold(emptyList()) { acc, i -> acc + tmap.map { enlargeRowTimes(it, i) } }
-    }
-
-    tailrec fun djikstra(input: List<List<Int>>, grid: Map<Point, Int>): Int {
-        val w = input.first().size
-        val h = input.size
-
-        val newGrid = grid
-            .flatMap { (point, cost) ->
-                neighbours(input,point.first,point.second).map { (x, y) -> (x to y) to input[y][x] + cost } + listOf(point to cost)
-            }
-            .groupBy { it.first }
-            .mapValues { (_, value) -> value.minOf { pp -> pp.second } }
-            .toMap()
-
-        if (newGrid == grid) {
-            return grid[(h - 1) to (w - 1)]!!
-        }
-        return djikstra(input, newGrid)
-    }
-
-
-    fun part1(input: List<List<Int>>): Long {
-        return djikstra(input, mapOf((0 to 0) to 0)).toLong()
-    }
-
-    fun part2(input: List<List<Int>>): Long {
-        return djikstra(enlargeMap(input), mapOf((0 to 0) to 0)).toLong()
-    }
-
-    val testInput = readInput("Day15_test").map { it.trim().map { c -> c.digitToInt() } }
-    check(part1(testInput) == 40L)
-
     measureTimeMillisPrint {
-        val input = readInput("Day15").map { it.trim().map { c -> c.digitToInt() } }
-        println("Part 1 : " + part1(input))
-        println("Part 2 : " + part2(input))
+        val d = Day15(readInput("Day15"))
+        println(d.solvePart1())
+        println(d.solvePart2())
     }
 
 }
