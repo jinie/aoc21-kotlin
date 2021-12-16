@@ -16,7 +16,7 @@ class Day15(input: List<String>) {
         while (toVisit.isNotEmpty()) {
             val (y, x) = toVisit.poll().also { visited.add(it) }
 
-            neighbours(y, x, riskLevels).forEach { (nY, nX) ->
+            neighbours(riskLevels,y, x).forEach { (nY, nX) ->
                 if (!visited.contains(nY to nX)) {
                     val newDistance = dist[y][x] + riskLevels[nY][nX]
                     if (newDistance < dist[nY][nX]) {
@@ -38,12 +38,6 @@ class Day15(input: List<String>) {
     private fun List<List<Int>>.increased(by: Int) = map { row -> row.increasedAndCapped(by) }
 
     private fun List<Int>.increasedAndCapped(by: Int) = map { level -> (level + by).let { if (it > 9) it - 9 else it } }
-
-    private fun neighbours(y: Int, x: Int, riskLevels: List<List<Int>>): List<Pair<Int, Int>> {
-        return arrayOf((-1 to 0), (1 to 0), (0 to -1), (0 to 1))
-            .map { (dy, dx) -> y + dy to x + dx }
-            .filter { (y, x) -> y in riskLevels.indices && x in riskLevels.first().indices }
-    }
 }
 
 fun main() {
