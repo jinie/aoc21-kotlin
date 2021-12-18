@@ -1,4 +1,3 @@
-
 class Day18(private val input: List<String>) {
 
     fun solvePart1(): Int {
@@ -40,15 +39,10 @@ class Day18(private val input: List<String>) {
 
     private class NodeNumber(var value: Int) : Node() {
         override fun magnitude() = value
-
         override fun addToLeftMost(value: Int) = run { this.value += value }
-
         override fun addToRightMost(value: Int) = run { this.value += value }
-
         override fun split() = false
-
         override fun explode(depth: Int): Pair<Int, Int>? = null
-
         override fun toString() = "$value"
 
         companion object {
@@ -58,9 +52,7 @@ class Day18(private val input: List<String>) {
 
     private class NodePair(var left: Node, var right: Node) : Node() {
         override fun magnitude() = 3 * left.magnitude() + 2 * right.magnitude()
-
         override fun addToLeftMost(value: Int) = left.addToLeftMost(value)
-
         override fun addToRightMost(value: Int) = right.addToRightMost(value)
 
         override fun split(): Boolean {
@@ -137,7 +129,7 @@ class Day18(private val input: List<String>) {
     }
 }
 
-fun main(){
+fun main() {
     measureTimeMillisPrint {
         val d = Day18(readInput("Day18"))
         println(d.solvePart1())
