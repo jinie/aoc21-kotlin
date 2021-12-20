@@ -19,6 +19,7 @@ class Day17(input: String) {
         }
     }
 
+
     data class TargetArea(val x1: Int, val x2: Int, val y1: Int, val y2: Int) {
         operator fun contains(point: Pair<Int, Int>) = point.first in x1..x2 && point.second in y1..y2
     }
