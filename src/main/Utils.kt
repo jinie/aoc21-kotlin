@@ -99,4 +99,12 @@ data class Point2d(var x: Int, var y: Int) {
             Point2d(x + 1, y - 1),
             Point2d(x + 1, y + 1)
         )
+
+    fun allNeighborsInclusive(): List<Point2d> =
+        neighbors() + listOf(
+            Point2d(x - 1, y - 1),
+            Point2d(x - 1, y + 1),
+            Point2d(x + 1, y - 1),
+            Point2d(x + 1, y + 1)
+        )
 }
