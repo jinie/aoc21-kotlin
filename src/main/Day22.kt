@@ -50,10 +50,10 @@ class Day22(input: List<String>) {
         solve()
 }
 
-fun main(){
+fun main() {
     measureTimeMillisPrint {
         val d = Day22(readInput("Day22"))
-        println("Part 1 : "+d.solvePart1())
-        println("Part 2 : "+d.solvePart2())
+        println("Part 1 : " + d.solvePart1())
+        println("Part 2 : " + d.solvePart2())
     }
 }
