@@ -108,3 +108,12 @@ data class Point2d(var x: Int, var y: Int) {
             Point2d(x + 1, y + 1)
         )
 }
+
+infix fun IntRange.intersects(other: IntRange): Boolean =
+    first <= other.last && last >= other.first
+
+infix fun IntRange.intersect(other: IntRange): IntRange =
+    maxOf(first, other.first)..minOf(last, other.last)
+
+fun IntRange.size(): Int =
+    last - first + 1
